@@ -16,6 +16,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dash: ^1.0.0
+  percent_indicator: ^4.2.4
+  fl_chart: ^0.69.2
 
 dev_dependencies:
   flutter_test:

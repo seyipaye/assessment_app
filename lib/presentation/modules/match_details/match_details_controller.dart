@@ -1,18 +1,28 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:get/get.dart';
 
 import 'match_details_screen.dart';
 
 typedef Data = Map<String, dynamic>;
 
+typedef GraphPoints = List<GraphPoint>;
+
+class GraphPoint {
+  double minute;
+  double value;
+  GraphPoint({
+    required this.minute,
+    required this.value,
+  });
+}
+
 class MatchDetailsController extends GetxController {
-  Future<Data> loadStats() async {
+  Future<Data> loadData(String path) async {
     // Load the JSON file as a string
-    final String jsonString =
-        await rootBundle.loadString('assets/data_samples/incidents.json');
+    final String jsonString = await rootBundle.loadString(path);
 
     // Decode the JSON string into a Map
     final Map<String, dynamic> jsonData = json.decode(jsonString);
@@ -22,12 +32,25 @@ class MatchDetailsController extends GetxController {
 
   final incidents = Rxn<Data>();
   final RxList<Widget> incidentWidgets = RxList.empty();
+  final RxList<GraphPoint> momentum = RxList.empty();
 
   @override
   Future<void> onInit() async {
-    incidents.value = await loadStats();
+    incidents.value = await loadData('assets/data_samples/incidents.json');
     sortIncidents(incidents.value!);
+    momentum.value = await loadMomentum();
+    // print(momentum.length);
     super.onInit();
+  }
+
+  Future<GraphPoints> loadMomentum() async {
+    final response = await loadData('assets/data_samples/momentum.json');
+
+    return (response['data']['graphPoints'] as List)
+        .map((e) => GraphPoint(
+            minute: (e['minute'] as num?)!.toDouble(),
+            value: (e['value'] as num?)!.toDouble()))
+        .toList();
   }
 
   void sortIncidents(Data value) {
@@ -82,9 +105,9 @@ class MatchDetailsController extends GetxController {
       }
     }
     incidentWidgets.value = widgets;
-    debugPrint(list.length.toString());
-    debugPrint(penalties.length.toString());
-    debugPrint(widgets.length.toString());
+    // debugPrint(list.length.toString());
+    // debugPrint(penalties.length.toString());
+    // debugPrint(widgets.length.toString());
   }
 
   List<Widget> sortPenalties(List<Data> values) {

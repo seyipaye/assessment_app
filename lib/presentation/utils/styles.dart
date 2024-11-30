@@ -3,15 +3,21 @@ import 'package:flutter/material.dart';
 import 'constants.dart';
 import 'strings.dart';
 
-TextStyle _getTextStyle(double fontSize, FontWeight fontWeight, Color color,
-    {double letterSpacing = .75, double? height}) {
+TextStyle _getTextStyle(
+  double fontSize,
+  FontWeight fontWeight,
+  Color color, {
+  double letterSpacing = .75,
+  double? height,
+}) {
   return TextStyle(
-      fontFamily: kRaleway,
-      fontSize: fontSize,
-      color: color,
-      height: height,
-      fontWeight: fontWeight,
-      letterSpacing: letterSpacing);
+    color: color,
+    height: height,
+    fontSize: fontSize,
+    fontFamily: kRaleway,
+    fontWeight: fontWeight,
+    letterSpacing: letterSpacing,
+  );
 }
 
 // Title

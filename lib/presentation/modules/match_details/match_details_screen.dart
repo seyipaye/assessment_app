@@ -7,10 +7,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';
 import '../home/home_page.dart';
+import 'bar_chart.dart';
 
 class MatchDetailsScreen extends GetView<MatchDetailsController> {
   MatchDetailsScreen({
@@ -240,7 +242,7 @@ class ClubInfo extends StatelessWidget {
   }
 }
 
-class OverviewPage extends StatelessWidget {
+class OverviewPage extends GetWidget<MatchDetailsController> {
   const OverviewPage({super.key});
 
   @override
@@ -356,6 +358,96 @@ class OverviewPage extends StatelessWidget {
                     ),
                   ),
                 )
+              ],
+            ),
+          ),
+        ),
+        gap20,
+        CardWrapper(
+          leading: CardWrapper.buildTitle('Live Match Momentum'),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 15, bottom: 15),
+            child: Column(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('60%'),
+                          Text('Ball Possession'),
+                          Text('40%'),
+                        ],
+                      ),
+                    ),
+                    gap4,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: LinearPercentIndicator(
+                        percent: 0.6,
+                        backgroundColor: AppColors.redPossession,
+                        progressColor: AppColors.yellow,
+                      ),
+                    ),
+                  ],
+                ),
+                gap20,
+                // gap20,
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Row(
+                    children: [
+                      Column(
+                        children: [
+                          Image.asset(
+                            'assets/icons/barcelona_icon.png',
+                            width: 20,
+                          ),
+                          gap24,
+                          Image.asset(
+                            'assets/icons/girona_icon.png',
+                            width: 20,
+                          ),
+                        ],
+                      ),
+                      const Gap(10),
+                      if (controller.momentum.isNotEmpty)
+                        Expanded(
+                          child: SingleChildScrollView(
+                            scrollDirection:
+                                Axis.horizontal, // Enable horizontal scrolling
+                            child: SizedBox(
+                              width: 870, // Dynamic width based on data
+                              child: Stack(
+                                children: [
+                                  Positioned.fill(
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            color: AppColors.lightYellow,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Container(
+                                            color: AppColors.lightRed,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  BarChartSample5(data: controller.momentum),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
